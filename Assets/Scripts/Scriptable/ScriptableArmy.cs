@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewArmy", menuName = "Scriptable/Army")]
 public class ScriptableArmy : ScriptableObject
 {
+    [System.Serializable]
     public class SoldierInfo
     {
         /// <summary>

@@ -145,7 +145,7 @@ PrefabInstance:
     - target: {fileID: 8005504617423129038, guid: f66b57d21a0818c4b88dd0652a81cde0,
         type: 3}
       propertyPath: m_Name
-      value: Army_Fourth
+      value: Army_Four
       objectReference: {fileID: 0}
     - target: {fileID: 8609599499534470639, guid: f66b57d21a0818c4b88dd0652a81cde0,
         type: 3}
@@ -255,7 +255,7 @@ PrefabInstance:
     - target: {fileID: 9012270957757714360, guid: f66b57d21a0818c4b88dd0652a81cde0,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 9012270957757714360, guid: f66b57d21a0818c4b88dd0652a81cde0,
         type: 3}
@@ -409,7 +409,7 @@ PrefabInstance:
     - target: {fileID: 9012270957757714360, guid: f66b57d21a0818c4b88dd0652a81cde0,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 9012270957757714360, guid: f66b57d21a0818c4b88dd0652a81cde0,
         type: 3}
@@ -563,7 +563,7 @@ PrefabInstance:
     - target: {fileID: 9012270957757714360, guid: f66b57d21a0818c4b88dd0652a81cde0,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 9012270957757714360, guid: f66b57d21a0818c4b88dd0652a81cde0,
         type: 3}
@@ -959,7 +959,7 @@ PrefabInstance:
     - target: {fileID: 9012270957757714360, guid: f66b57d21a0818c4b88dd0652a81cde0,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 9012270957757714360, guid: f66b57d21a0818c4b88dd0652a81cde0,
         type: 3}

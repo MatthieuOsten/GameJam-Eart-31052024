@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewUnit", menuName = "Scriptable/Unit")]
 public class ScriptableUnit : ScriptableObject
 {
+    [System.Serializable]
     public class UnitInfo
     {
         /// <summary>
@@ -46,20 +47,24 @@ public class ScriptableUnit : ScriptableObject
     /// <summary>
     /// All units
     /// </summary>
-    [SerializeField] private UnitInfo[] _units;
+    [SerializeField] private UnitInfo[] _units = new UnitInfo[1];
 
     private void OnValidate()
     {
-        for (int i = 0; i < _units.Length; i++)
+        if (_units != null)
         {
-            if (i > 0)
+            for (int i = 0; i < _units.Length; i++)
             {
-                _units[i].IsVariant = true;
-            }
-            else
-            {
-                _units[i].IsVariant = false;
+                if (i > 0)
+                {
+                    _units[i].IsVariant = true;
+                }
+                else
+                {
+                    _units[i].IsVariant = false;
+                }
             }
         }
+
     }
 }
