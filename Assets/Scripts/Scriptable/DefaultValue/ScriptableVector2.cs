@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 using UnityEngine;
 
+[HelpURL("https://www.youtube.com/watch?v=dQw4w9WgXcQ")]
 [CreateAssetMenu(fileName = "NewVector2", menuName = "Scriptable/Default/Vector2")]
 public class ScriptableVector2 : ScriptableObject
 {
@@ -11,7 +12,6 @@ public class ScriptableVector2 : ScriptableObject
             return _Vector2; 
         }
         set {
-            Debug.Log("Value " + Value + " changer for " + value);
             _Vector2 = value; 
         } 
     }

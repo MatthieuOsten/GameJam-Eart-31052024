@@ -1,10 +1,14 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InputHandler : MonoBehaviour
 {
+
     [Header("SETTINGS")]
     [SerializeField] private Controller _controller;
     [SerializeField] private bool _debug;
+
+    #region SCRIPTABLES
 
     [Header("ON CONTROLS")]
     [SerializeField] private ScriptableVector2 _moveDirection;
@@ -21,6 +25,8 @@ public class InputHandler : MonoBehaviour
     [Header("IN GAME")]
     [SerializeField] private ScriptableEvent _eventPause;
 
+    #endregion
+
     public Controller Inputs { 
         get 
         { 
@@ -34,11 +40,6 @@ public class InputHandler : MonoBehaviour
         } 
     }
 
-    private void Update()
-    {
-        if (_controller == null) { Debug.LogWarning("is null"); }
-    }
-
     private void Awake()
     {
         _controller = new Controller();
@@ -46,7 +47,6 @@ public class InputHandler : MonoBehaviour
 
     private void OnEnable()
     {
-        Debug.Log("is enable");
         if (Inputs == null) { return; }
 
         // Enabled controllers
@@ -59,7 +59,6 @@ public class InputHandler : MonoBehaviour
         // If _moveDirection is not null set MoveDirection event input
         if (_moveDirection != null)
         {
-            Debug.Log("MOVE DIRECTION ENABLE");
             Inputs.OnControls.Movement.performed += ctx => _moveDirection.ReceiveInput(ctx.ReadValue<Vector2>());
             Inputs.OnControls.Movement.canceled += ctx => _moveDirection.ReceiveInput(Vector2.zero);
         }
@@ -103,7 +102,6 @@ public class InputHandler : MonoBehaviour
         }
         #endregion
 
-        Debug.Log("finish enable");
     }
 
     private void OnDisable()

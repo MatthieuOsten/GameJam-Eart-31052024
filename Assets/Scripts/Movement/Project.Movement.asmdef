@@ -1,10 +1,10 @@
 {
-    "name": "Project.Manager",
+    "name": "Project.Movement",
     "rootNamespace": "",
     "references": [
-        "GUID:5f567bffa3a51f14b8c31ff51db5f272",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
         "GUID:e0a67d2626b068c48bfce99083d1dc2b",
-        "GUID:140c0ae8545f165419a4e2d66a567fe1"
+        "GUID:5f84a624fbc6cde40bbd9797a0b06652"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -19,3 +19,9 @@ MonoBehaviour:
     _prefabs: {fileID: 0}
     _soundNames: {fileID: 0}
     _isVariant: 0
+  - _name: 
+    _description: {fileID: 0}
+    _sprite: {fileID: 0}
+    _prefabs: {fileID: 0}
+    _soundNames: {fileID: 0}
+    _isVariant: 1

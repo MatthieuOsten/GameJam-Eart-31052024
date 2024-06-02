@@ -15,7 +15,7 @@ public class ScriptableArmy : ScriptableObject
         /// <summary>
         /// Index of skin to unit
         /// </summary>
-        [SerializeField] private uint _indexVariant;
+        [SerializeField] private int _indexVariant;
 
         /// <summary>
         /// Health of soldier
@@ -28,24 +28,39 @@ public class ScriptableArmy : ScriptableObject
         public float Health
         {
             get { return _health; }
-            set { 
+            set
+            {
                 if (value < 0) { _health = 0; }
                 else { _health = value; }
-                }
+            }
+        }
+
+        /// <summary>
+        /// Index of skin of selected unit
+        /// </summary>
+        public int Skin
+        {
+            get
+            {
+                return _indexVariant;
+            }
+
+            set
+            {
+                _indexVariant = value;
+            }
         }
 
         public SoldierInfo()
         {
             _name = "Smith";
             _indexVariant = 0;
-            _health = 0;
         }
 
-        public SoldierInfo(string name, uint indexSkin, float health)
+        public SoldierInfo(string name, int indexSkin, float health)
         {
             _name = name;
             _indexVariant = indexSkin;
-            _health = health;
         }
 
     }
@@ -105,5 +120,16 @@ public class ScriptableArmy : ScriptableObject
         }
 
         _soldiers = new SoldierInfo[numbers];
+    }
+
+    private void OnValidate()
+    {
+        foreach (var soldier in _soldiers)
+        {
+            if (_unit != null)
+            {
+                if (soldier.Skin > _unit.NbrVariant) { soldier.Skin = _unit.NbrVariant; }
+            }
+        }
     }
 }
