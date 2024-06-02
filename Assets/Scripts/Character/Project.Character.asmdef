@@ -1,0 +1,19 @@
+{
+    "name": "Project.Character",
+    "rootNamespace": "",
+    "references": [
+        "GUID:140c0ae8545f165419a4e2d66a567fe1",
+        "GUID:e0a67d2626b068c48bfce99083d1dc2b",
+        "GUID:c5d516603e7827d46b25619bfe0a77a7",
+        "GUID:1e1612a530c025642b2f2ce8f680f5ef"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,17 @@
+{
+    "name": "Project.ToPull",
+    "rootNamespace": "",
+    "references": [
+        "GUID:e0a67d2626b068c48bfce99083d1dc2b",
+        "GUID:5f84a624fbc6cde40bbd9797a0b06652"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
