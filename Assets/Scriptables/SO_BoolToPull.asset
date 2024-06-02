@@ -9,7 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f77b56d9e64493840b524ed571c2d7a1, type: 3}
-  m_Name: SO_FloatLaunchForce
+  m_Script: {fileID: 11500000, guid: ca662dd42c95ebf47ab60daf67066856, type: 3}
+  m_Name: SO_BoolToPull
   m_EditorClassIdentifier: 
-  _value: 8.776874

@@ -8,6 +8,7 @@ public class Viewfinder : MonoBehaviour
     [Header("VALUE")]
     [SerializeField] ScriptableVector2 _scriptableDirection;
     [SerializeField] ScriptableFloat _scriptableForce;
+    [SerializeField] ScriptableBool _scriptablePower;
 
     [SerializeField] Transform _origin;
     [SerializeField] Vector2 _direction;
@@ -25,8 +26,6 @@ public class Viewfinder : MonoBehaviour
         get { return _display; }
 
         set {
-            if (_display != value) { DisplayPoints(_points,value); }
-
             _display = value; 
         }
     }
@@ -73,7 +72,10 @@ public class Viewfinder : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (_scriptablePower != null) { Display = _scriptablePower.Value; }
+
         UpdatePoints(_points);
+        DisplayPoints(_points, Display);
     }
 
     private void Start()

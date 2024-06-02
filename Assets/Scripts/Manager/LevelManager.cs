@@ -1,3 +1,5 @@
+using Codice.Client.BaseCommands.BranchExplorer;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -64,9 +66,8 @@ public class LevelManager : MonoBehaviour
 
     }
 
-    private void SpawnSoldiers(Player player,int index)
+    private void SpawnSoldiers(Player player, int index)
     {
-
         if (player == null) { return; }
         if (index < 0 || index >= _players.Length) { Debug.LogError("Number of index is not work -> " + index + " nbr player -> " + _players.Length); }
 
@@ -85,30 +86,7 @@ public class LevelManager : MonoBehaviour
 
         if (_spawnPoint[index].Count < 4) { Debug.LogError("Dont have spawn point for all soldiers"); }
 
-        // Detach all point of principal list
-
-        List<Transform> usablePoint = new List<Transform>();
-
-        foreach (var point in _spawnPoint[index])
-        {
-            usablePoint.Add(point);
-        }
-
-        // Spawn all soldier of this player
-
-        int spawnableSoldier = player.Army.Soldiers.Length;
-
-        while (spawnableSoldier > 0)
-        {
-            int random = Random.Range(0,usablePoint.Count);
-
-            Instantiate(player.Army.Unit.GetPrefab(player.Army.Soldiers[spawnableSoldier - 1].Skin),player.transform);
-
-            usablePoint.RemoveAt(random);
-            spawnableSoldier--;
-        }
-
-        Debug.Log(name + " | Player " + index + " is totaly spawner " + player.Army.Soldiers.Length + " soldier, prepare to fight");
-
+        player.SpawnSoldiers(_spawnPoint[index],index);
     }
+
 }

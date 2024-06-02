@@ -333,6 +333,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1531601393}
+  - component: {fileID: 1531601395}
   - component: {fileID: 1531601394}
   m_Layer: 0
   m_Name: ShootHandler
@@ -378,6 +379,38 @@ MonoBehaviour:
   _nbrPoints: 10
   _points: []
   _prefabPoint: {fileID: 970868242}
+--- !u!114 &1531601395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1531601392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3013b52b6f30124b8f4f930be976e20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _prefabProjectile: {fileID: 0}
+  _projectileStored: {fileID: 0}
+  _displayRay: {fileID: 0}
+  _shootPosition: {fileID: 0}
+  _scriptableAimded: {fileID: 0}
+  _scriptableShoot: {fileID: 0}
+  _scripatbleCancel: {fileID: 0}
+  _scriptableDirection: {fileID: 0}
+  _scriptableForce: {fileID: 0}
+  _limitForce: {x: 3, y: 5}
+  _speedForce: 1
+  _eventShooting:
+    m_PersistentCalls:
+      m_Calls: []
+  _eventAimded:
+    m_PersistentCalls:
+      m_Calls: []
+  _eventCancel:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1609121491
 GameObject:
   m_ObjectHideFlags: 0
@@ -812,7 +845,7 @@ MonoBehaviour:
     _scriptableDirection: {fileID: 11400000, guid: c31768819df806d45a9b600cc4b14e46,
       type: 2}
     _groundRaycast: 0.5
-  _shoot: {fileID: 0}
+  _shoot: {fileID: 1531601395}
 --- !u!4 &7510065904947865153
 Transform:
   m_ObjectHideFlags: 0

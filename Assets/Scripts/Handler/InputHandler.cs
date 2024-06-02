@@ -7,6 +7,9 @@ public class InputHandler : MonoBehaviour
     [Header("SETTINGS")]
     [SerializeField] private Controller _controller;
     [SerializeField] private bool _debug;
+    [SerializeField] private Vector2 _limitForce = new Vector2(3f,20f);
+    [SerializeField] private bool _pressPowerAdd = false, _pressPowerSub = false;
+    [SerializeField] private float _pressSpees = 10f;
 
     #region SCRIPTABLES
 
@@ -18,12 +21,13 @@ public class InputHandler : MonoBehaviour
     [SerializeField] private ScriptableEvent _eventShoot;
 
     [Header("ON TARGET")]
-    [SerializeField] private ScriptableFloat _moveHeight;
+    [SerializeField] private ScriptableVector2 _moveDirectionTarget;
+    [SerializeField] private ScriptableFloat _floatLaunchPower;
     [SerializeField] private ScriptableEvent _eventCancel;
-    [SerializeField] private ScriptableBool _eventPower;
+    [SerializeField] private ScriptableBool _eventToPull;
 
     [Header("IN GAME")]
-    [SerializeField] private ScriptableEvent _eventPause;
+    [SerializeField] private ScriptableBool _eventPause;
 
     #endregion
 
@@ -43,6 +47,13 @@ public class InputHandler : MonoBehaviour
     private void Awake()
     {
         _controller = new Controller();
+
+        if (_eventPause != null) { _eventPause.Value = false; }
+        if (_eventToPull != null) { _eventToPull.Value = false; }
+        if (_floatLaunchPower != null) { _floatLaunchPower.Value = 0f; }
+        if (_moveDirectionTarget != null) { _moveDirectionTarget.Value = Vector2.zero; }
+        if (_moveDirection != null) { _moveDirection.Value = Vector2.zero; }
+
     }
 
     private void OnEnable()
@@ -63,6 +74,12 @@ public class InputHandler : MonoBehaviour
             Inputs.OnControls.Movement.canceled += ctx => _moveDirection.ReceiveInput(Vector2.zero);
         }
 
+        if (_eventToPull != null)
+        {
+            Inputs.OnControls.Attack.started += ctx => _eventToPull.ReceiveInput(true);
+            Inputs.OnControls.Attack.started += ctx => ChangeStateOnTarget();
+        }
+
         if (_eventJump != null)
         {
             Inputs.OnControls.Jump.performed += ctx => _eventJump.LaunchEvent();
@@ -70,35 +87,50 @@ public class InputHandler : MonoBehaviour
         #endregion
 
         #region SHOOT ENABLE
+
         if (_eventShoot != null)
         {
             Inputs.OnShooting.Shoot.performed += ctx => _eventShoot.LaunchEvent();
+            Inputs.OnShooting.Shoot.performed += ctx => _eventToPull.ReceiveInput(false);
         }
         #endregion
 
         #region TARGET ENABLE
-        if (_moveHeight != null)
+
+        if (_moveDirectionTarget != null)
         {
-            Inputs.OnTarget.Movement.performed += ctx => _moveHeight.ReceiveInput(ctx.ReadValue<float>());
-            Inputs.OnTarget.Movement.canceled += ctx => _moveHeight.ReceiveInput(0f);
+            Inputs.OnTarget.Movement.performed += ctx => _moveDirectionTarget.ReceiveInput(_moveDirectionTarget.Value + ctx.ReadValue<Vector2>());
+        }
+
+        if (_floatLaunchPower != null)
+        {
+            Inputs.OnTarget.PowerAdd.started += ctx => _pressPowerAdd = true;
+            Inputs.OnTarget.PowerAdd.canceled += ctx => _pressPowerAdd = false;
+
+            Inputs.OnTarget.PowerSub.started += ctx => _pressPowerSub = true;
+            Inputs.OnTarget.PowerSub.canceled += ctx => _pressPowerSub = false;
         }
 
         if (_eventCancel != null)
         {
             Inputs.OnTarget.Cancel.performed += ctx => _eventCancel.LaunchEvent();
+            Inputs.OnTarget.Cancel.performed += ctx => ChangeStateOnControls();
+            if (_floatLaunchPower != null)
+            {
+                Inputs.OnTarget.Cancel.performed += ctx => _floatLaunchPower.ReceiveInput(0f);
+            }
         }
 
-        if (_eventJump != null)
+        if (_eventToPull != null)
         {
-            Inputs.OnTarget.Power.started += ctx => _eventPower.ReceiveInput(true);
-            Inputs.OnTarget.Power.canceled += ctx => _eventPower.ReceiveInput(false);
+            Inputs.OnTarget.Cancel.started += ctx => _eventToPull.ReceiveInput(false);
         }
         #endregion
 
         #region INGAME ENABLE
         if (_eventPause != null)
         {
-            Inputs.InGame.Pause.performed += ctx => _eventPause.LaunchEvent();
+            Inputs.InGame.Pause.started += ctx => _eventPause.ReceiveInput(!_eventPause.Value);
         }
         #endregion
 
@@ -114,12 +146,18 @@ public class InputHandler : MonoBehaviour
         Inputs.OnShooting.Disable();
         Inputs.OnTarget.Disable();
 
-        #region CONTROLS DISABLE
+        #region CONTROLS ENABLE
         // If _moveDirection is not null set MoveDirection event input
         if (_moveDirection != null)
         {
             Inputs.OnControls.Movement.performed -= ctx => _moveDirection.ReceiveInput(ctx.ReadValue<Vector2>());
             Inputs.OnControls.Movement.canceled -= ctx => _moveDirection.ReceiveInput(Vector2.zero);
+        }
+
+        if (_eventToPull != null)
+        {
+            Inputs.OnControls.Attack.started -= ctx => _eventToPull.ReceiveInput(true);
+            Inputs.OnControls.Attack.started -= ctx => ChangeStateOnTarget();
         }
 
         if (_eventJump != null)
@@ -128,38 +166,113 @@ public class InputHandler : MonoBehaviour
         }
         #endregion
 
-        #region SHOOT DISABLE
+        #region SHOOT ENABLE
+
         if (_eventShoot != null)
         {
-            Inputs.OnShooting.Shoot.performed -= ctx => _eventShoot.LaunchEvent();
+            Inputs.OnShooting.Shoot.performed += ctx => _eventShoot.LaunchEvent();
+            Inputs.OnShooting.Shoot.performed += ctx => _eventToPull.ReceiveInput(false);
         }
         #endregion
 
-        #region TARGET DISABLE
-        if (_moveHeight != null)
+        #region TARGET ENABLE
+
+        if (_moveDirectionTarget != null)
         {
-            Inputs.OnTarget.Movement.performed -= ctx => _moveHeight.ReceiveInput(ctx.ReadValue<float>());
-            Inputs.OnTarget.Movement.canceled -= ctx => _moveHeight.ReceiveInput(0f);
+            Inputs.OnTarget.Movement.performed -= ctx => _moveDirectionTarget.ReceiveInput(_moveDirectionTarget.Value + ctx.ReadValue<Vector2>());
+        }
+
+        if (_floatLaunchPower != null)
+        {
+            Inputs.OnTarget.PowerAdd.started -= ctx => _pressPowerAdd = true;
+            Inputs.OnTarget.PowerAdd.canceled -= ctx => _pressPowerAdd = false;
+
+            Inputs.OnTarget.PowerSub.started -= ctx => _pressPowerSub = true;
+            Inputs.OnTarget.PowerSub.canceled -= ctx => _pressPowerSub = false;
         }
 
         if (_eventCancel != null)
         {
             Inputs.OnTarget.Cancel.performed -= ctx => _eventCancel.LaunchEvent();
+            Inputs.OnTarget.Cancel.performed -= ctx => ChangeStateOnControls();
+            if (_floatLaunchPower != null)
+            {
+                Inputs.OnTarget.Cancel.performed -= ctx => _floatLaunchPower.ReceiveInput(0f);
+            }
         }
 
-        if (_eventJump != null)
+        if (_eventToPull != null)
         {
-            Inputs.OnTarget.Power.started -= ctx => _eventPower.ReceiveInput(true);
-            Inputs.OnTarget.Power.canceled -= ctx => _eventPower.ReceiveInput(false);
+            Inputs.OnTarget.Cancel.started -= ctx => _eventToPull.ReceiveInput(false);
         }
         #endregion
 
-        #region INGAME DISABLE
+        #region INGAME ENABLE
         if (_eventPause != null)
         {
-            Inputs.InGame.Pause.performed -= ctx => _eventPause.LaunchEvent();
+            Inputs.InGame.Pause.started -= ctx => _eventPause.ReceiveInput(!_eventPause.Value);
         }
         #endregion
+
+    }
+
+    private void Update()
+    {
+        if (_floatLaunchPower != null && _pressPowerAdd)
+        {
+            _floatLaunchPower.ReceiveInput(_floatLaunchPower.Value + (_pressSpees * Time.deltaTime), _limitForce);
+        }
+        else if (_floatLaunchPower != null && _pressPowerSub)
+        {
+            _floatLaunchPower.ReceiveInput(_floatLaunchPower.Value - (_pressSpees * Time.deltaTime), _limitForce);
+        }
+
+    }
+
+    private void ChangeStateOnControls()
+    {
+
+        Debug.Log("Change for controls");
+
+        Inputs.OnControls.Enable();
+        Inputs.OnShooting.Disable();
+        Inputs.OnTarget.Disable();
+
+        Debug.Log("InGame is " + Inputs.InGame.enabled + " | OnControls is " + Inputs.OnControls.enabled + " | OnTarget is " + Inputs.OnTarget.enabled + " | OnShooting is " + Inputs.OnShooting.enabled);
+
+    }
+
+    private void ChangeStateOnTarget()
+    {
+        Debug.Log("Change for targets");
+
+        Inputs.OnControls.Disable();
+        Inputs.OnTarget.Enable();
+        Inputs.OnShooting.Enable();
+
+        Debug.Log("InGame is " + Inputs.InGame.enabled + " | OnControls is " + Inputs.OnControls.enabled + " | OnTarget is " + Inputs.OnTarget.enabled + " | OnShooting is " + Inputs.OnShooting.enabled);
+
+    }
+
+    private void ChangeStatePause(bool active)
+    {
+        if (active)
+        {
+            Inputs.OnControls.Disable();
+            Inputs.OnShooting.Disable();
+            Inputs.OnTarget.Disable();
+
+            Cursor.visible = true;
+        }
+        else
+        {
+            Inputs.OnControls.Enable();
+            Inputs.OnShooting.Enable();
+            Inputs.OnTarget.Enable();
+
+            Cursor.visible = false;
+        }
+
     }
 
 }

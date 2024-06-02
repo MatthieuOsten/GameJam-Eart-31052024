@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [HelpURL("https://www.youtube.com/watch?v=dQw4w9WgXcQ")]
 public class Character : MonoBehaviour
 {
-
-
 
     [SerializeField] private float _health;
     [SerializeField] private float _healthMaximum;
@@ -17,6 +16,7 @@ public class Character : MonoBehaviour
     [SerializeField] private MoveJump _jump;
     [SerializeField] private Shoot _shoot;
 
+    [SerializeField] private GameObject _body;
 
     /// <summary>
     /// Active or disable all movements of this character
@@ -88,6 +88,19 @@ public class Character : MonoBehaviour
             if (_jump.Target == null) { _jump.Target = gameObject; }
         }
 
+        if (_shoot != null)
+        {
+            SetTags(tag, _shoot.gameObject);
+        }
+
+    }
+
+    private void Start()
+    {
+        if (_shoot != null)
+        {
+            SetTags(tag,_shoot.gameObject);
+        }
     }
 
     private void OnDrawGizmos()
@@ -130,5 +143,24 @@ public class Character : MonoBehaviour
 
         _walk.FixedUpdateMovement();
         _jump.FixedUpdateMovement();
+    }
+
+    private void SetTags(string tag, GameObject tagedObject)
+    {
+        tagedObject.tag = tag;
+
+        for (int i = 0; i < tagedObject.transform.childCount; i++)
+        {
+            SetTags(tag, tagedObject.transform.GetChild(i).gameObject);
+        }
+
+    }
+
+    public void TakeDamage(float damage)
+    {
+        if (Health == 0) { return; }
+
+        _body.transform.localScale = (_body.transform.localScale) * ((1.2f) * (Health - damage));
+        Health -= damage;
     }
 }

@@ -14,9 +14,10 @@ public class Player : MonoBehaviour
         get { return _army; }
     }
 
-    public Character[] Soldiers
+    public List<Character> Soldiers
     {
-        get { return _soldiers.ToArray(); }
+        get { return _soldiers; }
+        set { _soldiers = value; }
     }
 
     public GameObject actualSoldier
@@ -83,6 +84,52 @@ public class Player : MonoBehaviour
                 _army.Soldiers[i].Health = _soldiers[i].Health;
             }
         }
+    }
+
+    public void SpawnSoldiers(List<Transform> spawnPoints, int index)
+    {
+
+        // Detach all point of principal list
+
+        List<Transform> usablePoint = new List<Transform>();
+
+        foreach (Transform point in spawnPoints[index])
+        {
+            usablePoint.Add(point);
+        }
+
+        // Tags
+
+        string tagPlayer = "Player" + index;
+        transform.tag = tagPlayer;
+
+        // Spawn all soldier of this player
+
+        int spawnableSoldier = Army.Soldiers.Length;
+
+        while (spawnableSoldier > 0)
+        {
+            int random = Random.Range(0, usablePoint.Count);
+
+            GameObject instance = Instantiate(Army.Unit.GetPrefab(Army.Soldiers[spawnableSoldier - 1].Skin), transform);
+
+            Character character;
+            if (!instance.TryGetComponent<Character>(out character))
+            {
+                character = instance.AddComponent<Character>();
+                Debug.LogWarning("Prefab dont have class CHARACTER");
+            }
+
+            Soldiers.Add(instance.GetComponent<Character>());
+
+            instance.transform.tag = tagPlayer;
+
+            usablePoint.RemoveAt(random);
+            spawnableSoldier--;
+        }
+
+        Debug.Log(name + " | Player " + index + " is totaly spawner " + Army.Soldiers.Length + " soldier, prepare to fight");
+
     }
 
 }

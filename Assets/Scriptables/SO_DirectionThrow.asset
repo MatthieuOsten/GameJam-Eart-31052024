@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b19b7dd818b58634da38af4425a8cf88, type: 3}
   m_Name: SO_DirectionThrow
   m_EditorClassIdentifier: 
-  _Vector2: {x: 0, y: 0}
+  _Vector2: {x: -27.955044, y: 26.633896}

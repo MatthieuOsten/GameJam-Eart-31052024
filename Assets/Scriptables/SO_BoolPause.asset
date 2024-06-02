@@ -10,5 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ca662dd42c95ebf47ab60daf67066856, type: 3}
-  m_Name: SO_BoolPower
+  m_Name: SO_BoolPause
   m_EditorClassIdentifier: 
+  _value: 0

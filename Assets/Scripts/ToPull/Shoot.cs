@@ -7,18 +7,15 @@ using UnityEngine.Events;
 public class Shoot : MonoBehaviour
 {
     #region VARIABLE DISPLAY
-    private GameObject _prefabProjectile;
-    private GameObject _projectileStored;
+    [SerializeField] private GameObject _prefabProjectile;
+    [SerializeField] private GameObject _projectileStored;
 
-    private int _nbrProjectile = 1;
-    private float _timeBeforeRecover = 1f;
+    [SerializeField] private Viewfinder _displayRay;
+    [SerializeField] private Transform _shootPosition;
 
-    private Viewfinder _displayRay;
-    private Transform _shootPosition;
-
-    private ScriptableEvent _scriptableAimded;
-    private ScriptableEvent _scriptableShoot;
-    private ScriptableEvent _scripatbleCancel;
+    [SerializeField] private ScriptableEvent _scriptableAimded;
+    [SerializeField] private ScriptableEvent _scriptableShoot;
+    [SerializeField] private ScriptableEvent _scripatbleCancel;
     #endregion
 
     [Header("VALUE")]
@@ -54,15 +51,17 @@ public class Shoot : MonoBehaviour
 
     public void OnEnable()
     {
+        if (_scriptableShoot == null || _scripatbleCancel == null) { return; }
+
         _scriptableShoot.OnEvent += ShootProjectile;
-        _scriptableAimded.OnEvent += SeekAimded;
         _scripatbleCancel.OnEvent += HideAimded;
     }
 
     public void OnDisable()
     {
+        if (_scriptableShoot == null || _scripatbleCancel == null) { return; }
+
         _scriptableShoot.OnEvent -= ShootProjectile;
-        _scriptableAimded.OnEvent -= SeekAimded;
         _scripatbleCancel.OnEvent -= HideAimded;
     }
 
@@ -103,7 +102,19 @@ public class Shoot : MonoBehaviour
             _projectileStored = Instantiate<GameObject>(_prefabProjectile, transform);
             _projectileStored.transform.position = Vector3.zero;
             _projectileStored.SetActive(false);
+            SetTags(tag, _projectileStored);
         }
+    }
+
+    private void SetTags(string tag, GameObject tagedObject)
+    {
+        tagedObject.tag = tag;
+
+        for (int i = 0; i < tagedObject.transform.childCount; i++)
+        {
+            SetTags(tag, tagedObject.transform.GetChild(i).gameObject);
+        }
+
     }
 
     /// <summary>
@@ -127,6 +138,8 @@ public class Shoot : MonoBehaviour
 
                 _projectileStored.SetActive(true);
                 HideAimded();
+
+                SetTags(tag, _projectileStored);
 
                 ThrowHandler.LaunchObject(_projectileStored, _scriptableDirection.Value, _scriptableForce.Value);
 

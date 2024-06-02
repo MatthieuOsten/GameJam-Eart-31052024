@@ -14,4 +14,19 @@ public class ScriptableFloat : ScriptableObject
     {
         Value = value;
     }
+
+    public void ReceiveInput(float value,float limit)
+    {
+        if (value > limit) { Value = 0; return; }
+
+        Value = value;
+    }
+
+    public void ReceiveInput(float value, Vector2 limit)
+    {
+        if (value < limit.x) { Value = limit.x; return; }
+        if (value > limit.y) { Value = limit.y; return; }
+
+        Value = value;
+    }
 }
